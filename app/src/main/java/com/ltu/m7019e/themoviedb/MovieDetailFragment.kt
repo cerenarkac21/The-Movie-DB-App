@@ -6,25 +6,31 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.findNavController
-import com.ltu.m7019e.themoviedb.databinding.FragmentSecondBinding
-
+import com.ltu.m7019e.themoviedb.databinding.FragmentMovieDetailBinding
+import com.ltu.m7019e.themoviedb.model.Movie
 /**
  * A simple [Fragment] subclass as the second destination in the navigation.
  */
-class SecondFragment : Fragment() {
+class MovieDetailFragment : Fragment() {
 
-    private var _binding: FragmentSecondBinding? = null
+    private var _binding: FragmentMovieDetailBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
+    private lateinit var movie: Movie
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
 
-        _binding = FragmentSecondBinding.inflate(inflater, container, false)
+        //_binding = FragmentMovieDetailBinding.inflate(inflater, container, false)
+        _binding = FragmentMovieDetailBinding.inflate(inflater)
+        movie = MovieDetailFragmentArgs.fromBundle(requireArguments()).movie
+        binding.movie = movie
+
         return binding.root
 
     }
@@ -32,8 +38,9 @@ class SecondFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.buttonSecond.setOnClickListener {
-            findNavController().navigate(R.id.action_SecondFragment_to_FirstFragment)
+        binding.backToMovieList.setOnClickListener {
+            //findNavController().navigate(R.id.MovieDetailFragment_to_MovieListFragment)
+            findNavController().navigate(MovieDetailFragmentDirections.actionMovieDetailFragmentToMovieListFragment())
         }
     }
 
@@ -42,3 +49,5 @@ class SecondFragment : Fragment() {
         _binding = null
     }
 }
+
+

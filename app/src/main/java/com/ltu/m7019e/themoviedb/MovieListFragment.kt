@@ -4,25 +4,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.fragment.app.Fragment
-import com.bumptech.glide.Glide
 import com.ltu.m7019e.themoviedb.database.Movies
-import com.ltu.m7019e.themoviedb.databinding.FragmentFirstBinding
-import com.ltu.m7019e.themoviedb.utils.Constants
-import android.graphics.drawable.Drawable
+import com.ltu.m7019e.themoviedb.databinding.FragmentMovieListBinding
 import androidx.databinding.DataBindingUtil
+import androidx.navigation.fragment.findNavController
+import com.ltu.m7019e.themoviedb.databinding.MovieListItemBinding
 
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
-class FirstFragment : Fragment() { // : means inheritance.
+class MovieListFragment : Fragment() { // : means inheritance.
 // The FirstFragment class inherits all the functions of Fragment() superclass.
 
-    private var _binding: FragmentFirstBinding? = null
+    private var _binding: FragmentMovieListBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -34,13 +30,26 @@ class FirstFragment : Fragment() { // : means inheritance.
     ): View? {
 
         //_binding = FragmentFirstBinding.inflate(inflater, container, false)
-        //return binding.root
-        _binding = DataBindingUtil.inflate(inflater, R.layout.fragment_first, container, false)
+        //return binding.root // in the first version, the two code lines above were here.
+        // then added the three code lines below.
+        _binding = FragmentMovieListBinding.inflate(inflater)
         val movies = Movies()
-        binding.movies = movies
+        //binding.movies = movies  //in the second version, delete this line. add the below block
+        movies.list.forEach { movie ->
+            val movieListItemBinding: MovieListItemBinding = DataBindingUtil.inflate(inflater, R.layout.movie_list_item, container, false)
+            movieListItemBinding.movie = movie
+            movieListItemBinding.root.setOnClickListener {
+                //this.findNavController().navigate(MovieListFragmentDirections.a(movie))
+            }
+
+            binding.movieListLinearLayout.addView(movieListItemBinding.root)
+        }
+
         return binding.root
 
     }
+
+
 
 
     override fun onDestroyView() {
